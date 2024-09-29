@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <title>Vaqt Zona Konvertori</title>
+    <style>
+        /* Bosh sahifa uchun umumiy uslub */
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #74ebd5, #ACB6E5);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        /* Konvertor konteyneri */
+        .converter-container {
+            background-color: #ffffffcc;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+            max-width: 400px;
+            width: 100%;
+        }
+
+        /* Sarlavha uslubi */
+        .converter-container h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        /* Form gruppasi uslubi */
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #555;
+        }
+
+        .form-group select, 
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+
+        /* Tugma uslubi */
+        .convert-button {
+            width: 100%;
+            padding: 10px;
+            background-color: #4CAF50;
+            border: none;
+            color: white;
+            font-size: 18px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .convert-button:hover {
+            background-color: #45a049;
+        }
+
+        /* Natija ko‘rsatish uslubi */
+        .result {
+            margin-top: 20px;
+            text-align: center;
+            font-size: 20px;
+            color: #333;
+        }
+
+        /* Xatolik xabari uslubi */
+        .error {
+            color: red;
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        /* Responsive dizayn */
+        @media (max-width: 500px) {
+            .converter-container {
+                padding: 20px;
+            }
+
+            .converter-container h1 {
+                font-size: 24px;
+            }
+
+            .convert-button {
+                font-size: 16px;
+            }
+
+            .result {
+                font-size: 18px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="converter-container">
+        <h1>Vaqt Zona Konvertori</h1>
+        <div class="form-group">
+            <label for="from">Birinchi joyni tanlang:</label>
+            <select id="from">
+                <option value="">Tanlang...</option>
+                <option value="Asia/Tashkent">Toshkent</option>
+                <option value="Europe/London">London</option>
+                <option value="America/New_York">New York</option>
+                <option value="Asia/Tokyo">Tokio</option>
+                <option value="Australia/Sydney">Sidne</option>
+                <!-- Qo‘shimcha vaqt zonalari qo‘shishingiz mumkin -->
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="to">Ikkinchi joyni tanlang:</label>
+            <select id="to">
+                <option value="">Tanlang...</option>
+                <option value="Asia/Tashkent">Toshkent</option>
+                <option value="Europe/London">London</option>
+                <option value="America/New_York">New York</option>
+                <option value="Asia/Tokyo">Tokio</option>
+                <option value="Australia/Sydney">Sidne</option>
+                <!-- Qo‘shimcha vaqt zonalari qo‘shishingiz mumkin -->
+            </select>
+        </div>
+        <button class="convert-button" onclick="convertTime()">Konvert qilish</button>
+        <div class="result" id="result"></div>
+        <div class="error" id="error"></div>
+    </div>
+
+    <script>
+        async function convertTime() {
+            const from = document.getElementById('from').value;
+            const to = document.getElementById('to').value;
+            const resultDiv = document.getElementById('result');
+            const errorDiv = document.getElementById('error');
+
+            // Tozalash
+            resultDiv.innerText = '';
+            errorDiv.innerText = '';
+
+            if (!from || !to) {
+                errorDiv.innerText = 'Iltimos, har ikkala vaqt zonasini ham tanlang.';
+                return;
+            }
+
+            try {
+                const responseFrom = await fetch(`https://worldtimeapi.org/api/timezone/${from}`);
+                const dataFrom = await responseFrom.json();
+
+                const responseTo = await fetch(`https://worldtimeapi.org/api/timezone/${to}`);
+                const dataTo = await responseTo.json();
+
+                // Joriy vaqtlarni olish
+                const timeFrom = new Date(dataFrom.datetime);
+                const timeTo = new Date(dataTo.datetime);
+
+                // Farqni hisoblash
+                const diffInMs = timeTo - timeFrom;
+                const diffInHours = diffInMs / (1000 * 60 * 60);
+
+                // Natijani ko‘rsatish
+                resultDiv.innerText = `Vaqt farqi: ${diffInHours >= 0 ? '+' : ''}${diffInHours} soat`;
+
+            } catch (error) {
+                console.error(error);
+                errorDiv.innerText = 'Xatolik yuz berdi. Iltimos, qayta urinib ko‘ring.';
+            }
+        }
+    </script>
+</body>
+</html>
