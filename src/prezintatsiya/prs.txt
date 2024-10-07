@@ -1,3 +1,7 @@
 Vaqt Zona Konvertori — bu turli mamlakatlar yoki shaharlar orasidagi vaqt farqlarini aniqlash va foydalanuvchiga kerakli vaqtni ko‘rsatish imkonini 
 beruvchi dastur. Bunday dastur turli platformalarda (web, mobil, desktop) ishlab chiqilishi mumkin va foydalanuvchilarga rejalashtirishda, uchrashuvlar 
 tashkil etishda yoki safarlar paytida qulaylik yaratadi.
+
+
+nest js va sequelize dan foydalanib yozamiz!!
+
