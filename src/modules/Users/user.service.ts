@@ -18,23 +18,23 @@ export class UsersService {
 
   // Yangi foydalanuvchi yaratish
   async create(createUserDto: CreateUserDto): Promise<User> {
-    const { username, email, password } = createUserDto;
+    const { email } = createUserDto;
 
     // Foydalanuvchini tekshirish
-    const existingUser = await this.usersRepository.findOne({
-      where: [{ username }, { email }],
-    });
+    // const existingUser = await this.usersRepository.findOne({
+    //   where: [{ username }, { email }],
+    // });
 
-    if (existingUser) {
-      throw new ConflictException('Username yoki Email allaqachon mavjud');
-    }
+    // if (existingUser) {
+    //   throw new ConflictException('Username yoki Email allaqachon mavjud');
+    // }
 
     // Parolni hash qilish
     const salt = await bcrypt.genSalt();
-    const passwordHash = await bcrypt.hash(password, salt);
+    const passwordHash = await bcrypt.hash( salt);
 
     const user = this.usersRepository.create({
-      username,
+ 
       email,
       passwordHash,
     });

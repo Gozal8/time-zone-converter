@@ -1,8 +1,9 @@
-export interface IUser {
-  id: number;
-  username: string;
+import { UserRoles } from "../models";
+
+export declare interface CreateUserRequest {
+  name: string;
+  phone: string;
   email: string;
-  passwordHash: string;
-  createdAt: Date;
-  updatedAt: Date;
+  image?: Express.Multer.File;
+  role?: UserRoles;
 }

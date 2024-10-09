@@ -1,24 +1,37 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import { Table, Model, Column, DataType, HasMany } from 'sequelize-typescript';
 
-@Entity('users')
-export class User {
-  @PrimaryGeneratedColumn()
+
+export enum UserRoles {
+  user = 'USER',
+  admin = 'ADMIN',
+}
+
+@Table({ tableName: 'users', timestamps: true })
+export class User extends Model {
+  @Column({ type: DataType.INTEGER, primaryKey: true, autoIncrement: true })
   id: number;
 
-  @Column({ unique: true, length: 50 })
-  username: string;
+  @Column({ type: DataType.TEXT, allowNull: false })
+  name: string;
 
-  @Column({ unique: true, length: 100 })
+  @Column({ type: DataType.TEXT, allowNull: false })
+  phone: string;
+
+  @Column({ type: DataType.TEXT, allowNull: false, unique: true })
   email: string;
 
-  @Column({ name: 'password_hash', length: 255 })
-  passwordHash: string;
+  @Column({
+    type: DataType.ENUM,
+    values: [UserRoles.admin, UserRoles.user],
+    allowNull: false,
+    defaultValue: UserRoles.user,
+  })
+  role: UserRoles;
 
-  @CreateDateColumn({ name: 'created_at' })
-  createdAt: Date;
-
-  @UpdateDateColumn({ name: 'updated_at' })
-  updatedAt: Date;
+  @Column({ type: DataType.TEXT, allowNull: true })
+  image?: string;
+  passwordHash: any;
+  username: string;
 }
 
 
